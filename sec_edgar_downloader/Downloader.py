@@ -53,6 +53,7 @@ class Downloader:
         before: Optional[str] = None,
         include_amends: bool = False,
         download_details: bool = True,
+        download_full: bool = True,
         query: str = "",
     ) -> int:
         """Download filings and save them to disk.
@@ -69,6 +70,8 @@ class Downloader:
             Defaults to False.
         :param download_details: denotes whether or not to download human-readable and easily
             parseable filing detail documents (e.g. form 4 XML, 8-K HTML). Defaults to True.
+        :param download_full: denotes whether or not to download the full submission (e.g. if
+            only the human-readable filing detail documents are needed). Defaults to True.
         :param query: keyword to search for in filing documents.
         :return: number of filings downloaded.
 
@@ -186,6 +189,7 @@ class Downloader:
             filing,
             filings_to_fetch,
             download_details,
+            download_full
         )
 
         # Get number of unique accession numbers downloaded

@@ -276,27 +276,29 @@ def download_filings(
     filing_type: str,
     filings_to_fetch: List[FilingMetadata],
     include_filing_details: bool,
+    include_full_submission: bool
 ) -> None:
     client = requests.Session()
     client.mount("http://", HTTPAdapter(max_retries=retries))
     client.mount("https://", HTTPAdapter(max_retries=retries))
     try:
         for filing in filings_to_fetch:
-            try:
-                download_and_save_filing(
-                    client,
-                    download_folder,
-                    ticker_or_cik,
-                    filing.accession_number,
-                    filing_type,
-                    filing.full_submission_url,
-                    FILING_FULL_SUBMISSION_FILENAME,
-                )
-            except requests.exceptions.HTTPError as e:  # pragma: no cover
-                print(
-                    "Skipping full submission download for "
-                    f"'{filing.accession_number}' due to network error: {e}."
-                )
+            if include_full_submission:
+                try:
+                    download_and_save_filing(
+                        client,
+                        download_folder,
+                        ticker_or_cik,
+                        filing.accession_number,
+                        filing_type,
+                        filing.full_submission_url,
+                        FILING_FULL_SUBMISSION_FILENAME,
+                    )
+                except requests.exceptions.HTTPError as e:  # pragma: no cover
+                    print(
+                        "Skipping full submission download for "
+                        f"'{filing.accession_number}' due to network error: {e}."
+                    )
 
             if include_filing_details:
                 try:
